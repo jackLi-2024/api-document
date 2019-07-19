@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>API-Document</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .url {
+            display: flex;
+            border: 1px solid #ddd;
+            /* width: 1040px; */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border-left: none;
+            height: 40px;
+        }
+
+        .url>div {
+            border-left: 1px solid #ddd;
+            height: 100%;
+            padding-left: 15px;
+            line-height: 40px;
+        }
+
+        .item {
+            margin-top: 50px;
+        }
+        .fold {
+            cursor: pointer;
+        }
+        .detail {
+            display: none;
+        }
+    </style>
+    <link href="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3781312110,3665032584&fm=26&gp=0.jpg" rel="SHORTCUT ICON">
+</head>
+
+<body style="">
+{% if types %}
+    <div style="float: left;margin: 100px">
+        <h6><strong>文档类型列表</strong></h6>
+        {% for t in types %}
+        <a href="{% url 'api' apiType=t.typed %}">{{ t.typed }}</a><br>
+        {% endfor %}
+    </div>
+{% endif %}
+    <div class="items container">
+    <h3 style="text-align: center;margin-top: 50px">API文档 </h3>
+    <h5 style="text-align: right;">文档类型：{{ type }}</h5>
+        {% if api_list %}
+            {% for api in  api_list %}
+                <div class="item">
+                <div class="url">
+                    <div style="width: 70px;background-color: #4dff86;"><strong>{{ api.method }}</strong></div>
+                    <div style="width: 55%;">{{ api.typed__host }}{{ api.urls }}</div>
+                    <div style="flex: 1;">{{ api.description }}</div>
+                    <div style="width: 70px;" class="fold" onselectstart="return false">详情</div>
+                </div>
+                <div class="detail">
+                    {% if api.header %}
+                    <div>
+                        <h4>Headers</h4>
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                    <th>Desc</th>
+                                </tr>
+                            </thead>
+
+                            {% for header in api.header %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ header.key}}</td>
+                                    <td>{{ header.value}}</td>
+                                    <td>{{ header.description}}</td>
+                                </tr>
+                            </tbody>
+                                {% endfor %}
+
+                        </table>
+                    </div>
+                    {% endif %}
+                    {% if api.bodys %}
+                    <div>
+                        <h4>Body</h4>
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                    <th>Desc</th>
+                                </tr>
+                            </thead>
+
+                            {% for body in api.bodys %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ body.key }}</td>
+                                    <td>{{ body.value }}</td>
+                                    <td>{{ body.description }}</td>
+                                </tr>
+                            </tbody>
+                             {% endfor %}
+
+                        </table>
+                    </div>
+                    
+                    {% endif %}
+                    {% if api.querys %}
+                    <div>
+                        <h4>Query</h4>
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                    <th>Desc</th>
+                                </tr>
+                            </thead>
+
+                            {% for body in api.querys %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ body.key }}</td>
+                                    <td>{{ body.value }}</td>
+                                    <td>{{ body.description }}</td>
+                                </tr>
+                            </tbody>
+                             {% endfor %}
+
+                        </table>
+                    </div>
+                    
+                    {% endif %}
+                    {% if api.param %}
+                        <div>
+                        <h4>Params</h4>
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                    <th>Desc</th>
+                                </tr>
+                            </thead>
+
+                            {% for body in api.param %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ body.key }}</td>
+                                    <td>{{ body.value }}</td>
+                                    <td>{{ body.description }}</td>
+                                </tr>
+                            </tbody>
+                             {% endfor %}
+
+                        </table>
+                    </div>
+                     {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>不存在当前文档{{ type }}</p>
+        {% endif %}
+
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $('.fold').on('click', function () {
+            var state = $(this).text()
+            $(this).text(state === '详情' ? '收起' : '详情')
+            $(this).parent().next().slideToggle()
+        })
+    </script>
+</body>
+
+</html>
